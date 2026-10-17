@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lumo — Учись. Играй. Расти.</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#F6FAF4;--s:#fff;--t:#1F2A22;--m:#6C7A70;--a:#2F9E5B;--ad:#237A44;--sage:#E3F3E7;--b:#E3EBE2;--y:#8A6D0B;--yb:#FBF0C8;--bad:#B5472F;--badb:#FBE6E0;--co:#E4694F;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141A16;--s:#1E2621;--t:#EAF1EB;--m:#9AA89E;--a:#5BBF82;--ad:#3C9560;--sage:#25362B;--b:#2D3A31;--y:#E0BE4C;--yb:#37321D;--bad:#EE9480;--badb:#3A2520;color-scheme:dark}}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--t);font:600 15px/1.45 Nunito,system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px)}
+#app{max-width:520px;margin:0 auto;padding:16px 16px calc(92px + env(safe-area-inset-bottom,0px))}
+h1{font-size:24px;line-height:1.2;font-weight:800}
+h2{font-size:18px;font-weight:800;margin:24px 0 8px}
+.m{color:var(--m);font-size:13px;font-weight:600}
+.num{font-weight:800;font-variant-numeric:tabular-nums}
+.card{background:var(--s);border:2px solid var(--b);border-radius:16px;padding:16px;margin-top:8px}
+.row{display:flex;align-items:center;gap:12px}.sp{justify-content:space-between}
+.bar{height:10px;background:var(--sage);border-radius:6px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--a);border-radius:6px;transition:width .5s}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;text-align:left;width:100%}
+button:focus-visible,.cc:focus-visible,.in:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+.btn{display:block;background:var(--a);color:#fff;padding:14px 16px;border-radius:14px;font-weight:800;text-align:center;min-height:52px;margin-top:12px;box-shadow:0 4px 0 var(--ad);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--ad)}
+.btn:disabled{opacity:.5;cursor:default;box-shadow:none}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .btn{color:#0E1A12}}
+.btn.g{background:var(--s);color:var(--t);border:2px solid var(--b);box-shadow:0 4px 0 var(--b)}
+.item{display:flex;align-items:center;gap:12px;padding:12px 16px;min-height:60px}
+.ico{width:40px;height:40px;border-radius:12px;background:var(--sage);color:var(--a);display:grid;place-items:center;flex:none}
+.chip{display:inline-block;font-size:12px;font-weight:800;padding:2px 10px;border-radius:8px;background:var(--sage);color:var(--a);white-space:nowrap}
+.chip.y{background:var(--yb);color:var(--y)}
+svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.cv{width:100%;height:auto;display:block;border-radius:12px}
+.opt{display:block;border:2px solid var(--b);background:var(--s);border-radius:14px;padding:14px 16px;margin-top:8px;min-height:54px;box-shadow:0 3px 0 var(--b)}
+.opt.ok{border-color:var(--a);background:var(--sage)}.opt.no{border-color:var(--bad);background:var(--badb)}.opt.sel{border-color:#4C86C8;background:#E2EEFA;color:#1F2A22}
+.opt:disabled{cursor:default}
+.in{width:100%;font:inherit;font-size:18px;padding:14px;border:2px solid var(--b);border-radius:14px;background:var(--s);color:var(--t);margin-top:8px}
+.in.ok{border-color:var(--a)}.in.no{border-color:var(--bad)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.cc{position:relative;background:var(--s);border:2px solid var(--b);border-radius:16px;padding:8px;cursor:pointer}
+.cb{padding:8px 4px 4px}.cb b{display:block;font-size:14px;line-height:1.25}
+.hb{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:var(--s);display:grid;place-items:center;color:var(--m);padding:0}
+.hb.on{color:var(--co)}.hb.on svg{fill:var(--co)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0 4px;scrollbar-width:none}
+.chips button{width:auto;flex:none;padding:8px 14px;border-radius:12px;border:2px solid var(--b);background:var(--s);font-weight:700;min-height:40px}
+.chips .on{background:var(--a);border-color:var(--a);color:#fff}
+.sel2{font:inherit;padding:8px;border-radius:12px;border:2px solid var(--b);background:var(--s);color:var(--t);min-height:40px}
+.wk{display:flex;gap:8px;align-items:flex-end;height:72px;margin-top:12px}
+.wk div{flex:1;text-align:center;font-size:11px;color:var(--m);display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:4px}
+.wk i{display:block;background:var(--a);border-radius:4px;min-height:4px}
+.me{background:var(--sage);border-color:var(--a)}
+.tabs{display:flex;gap:4px;background:var(--sage);padding:4px;border-radius:14px;margin-top:12px}
+.tabs button{text-align:center;padding:8px;border-radius:10px;font-weight:700}.tabs .on{background:var(--s);font-weight:800}
+.inp{width:100%;font:inherit;padding:12px 14px 12px 40px;border-radius:14px;border:2px solid var(--b);background:var(--s);color:var(--t);min-height:48px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--s);border-top:2px solid var(--b);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center}
+nav>div{display:flex;max-width:520px;width:100%}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;color:var(--m);padding:6px 0;min-height:50px;text-align:center;font-weight:700}
+nav button[aria-current=page]{color:var(--a);font-weight:800}
+pre{background:var(--sage);border-radius:12px;padding:12px;overflow-x:auto;font:600 13px/1.5 ui-monospace,Menlo,monospace;margin-top:8px;white-space:pre}.card p{margin-top:4px}
+.pop{animation:p .35s}@keyframes p{from{transform:scale(.94);opacity:.5}}
+.hop{animation:h .9s ease-in-out 2}@keyframes h{50%{transform:translateY(-10px) rotate(-4deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<main id="app"></main>
+<nav id="nav"><div></div></nav>
+<script>
+const SC={ok:20,lesson:50,perfect:30,quest:15},LV=200,KEY='lumo.v2';
+const P={home:'M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z',book:'M4 19.5V5.5A2.5 2.5 0 0 1 6.5 3H20v14H6.5A2.5 2.5 0 0 0 4 19.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5',trophy:'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3',award:'M12 14a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM8.5 13.5 7 22l5-3 5 3-1.5-8.5',user:'M20 21v-1a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v1M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',flame:'M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z',x:'M6 6l12 12M18 6 6 18',back:'M15 6l-6 6 6 6',heart:'M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.5A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z',search:'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4',check:'M5 12l5 5 9-10',en:'M4 5h8M8 3v2M6 5c0 4 3 7 6 8M10 5c0 3-2 6-6 8M13 20l4-9 4 9M14.5 17h5',fl:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',pr:'M8 7l-5 5 5 5M16 7l5 5-5 5',ai:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z',ma:'M5 12h14M12 5v14',ds:'M4 20l4-1 11-11-3-3L5 16zM14 6l3 3',fi:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4',sc:'M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3',lo:'M12 3a3 3 0 0 1 3 3h4v4a3 3 0 0 0 0 6v4H5v-4a3 3 0 0 0 0-6V6h4a3 3 0 0 1 3-3z',sk:'M16 11a3 3 0 1 0 0-6M8 11a3 3 0 1 0 0-6M2 20c0-3 3-5 6-5s6 2 6 5M16 15c3 0 6 2 6 5'};
+const ic=n=>`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${P[n]}"/></svg>`;
+/* маскот и логотип */
+const lumo=(mood='ok',s=64,cls='')=>{const mo={happy:'<path d="M40 66q10 14 20 0z" fill="#20231F"/>',sad:'<path d="M41 74q9-9 18 0" stroke="#20231F" stroke-width="3" fill="none" stroke-linecap="round"/>',ok:'<path d="M41 67q9 8 18 0" stroke="#20231F" stroke-width="3" fill="none" stroke-linecap="round"/>'}[mood];
+return `<svg viewBox="0 0 100 100" width="${s}" height="${s}" class="${cls}" style="stroke:none;width:${s}px;height:${s}px" role="img" aria-label="Маскот Lumo"><ellipse cx="50" cy="60" rx="36" ry="34" fill="#58C47F"/><ellipse cx="50" cy="70" rx="22" ry="17" fill="#C3EDCF"/><path d="M50 27c-3-13 8-20 22-17-1 13-10 20-22 17z" fill="#2F9E5B"/><circle cx="37" cy="52" r="9" fill="#fff"/><circle cx="63" cy="52" r="9" fill="#fff"/><circle cx="${mood==='sad'?37:39}" cy="${mood==='sad'?55:53}" r="4.5" fill="#20231F"/><circle cx="${mood==='sad'?63:65}" cy="${mood==='sad'?55:53}" r="4.5" fill="#20231F"/><circle cx="27" cy="64" r="4" fill="#F4A08F"/><circle cx="73" cy="64" r="4" fill="#F4A08F"/>${mo}</svg>`};
+const logo=()=>`<div class="row" style="gap:8px">${lumo('happy',32)}<b style="font-size:22px;color:var(--a);font-weight:800">Lumo</b><span class="m">Учись. Играй. Расти.</span></div>`;
+/* каталог */
+const LVN=['Начальный','Средний','Продвинутый'];
+const CATS=[['en','Английский язык','#DFF3E3','#2F8A4C'],['fl','Другие языки','#DCEBFA','#2F6FB5'],['pr','Программирование','#E9E2F8','#6B4FBB'],['ai','ИИ и AI-инструменты','#FBF0C8','#9A7410'],['ma','Математика','#FBE3DC','#C0553B'],['ds','Дизайн и UX/UI','#F8E1EE','#B03F86'],['fi','Финансовая грамотность','#F6EBC4','#8A6D0B'],['sc','Наука и технологии','#D8F0F2','#23808C'],['lo','Логика и мышление','#E3EEDC','#5B7F2E'],['sk','Soft skills и карьера','#FCE6D6','#B8662C']];
+const BL={en:'Слова, грамматика и живая речь короткими сессиями.',fl:'Базовая лексика и фразы для первых разговоров.',pr:'Практика кода: от синтаксиса до небольших проектов.',ai:'Как использовать нейросети осознанно и с проверкой результата.',ma:'Наглядные объяснения и задачи с разбором.',ds:'Принципы дизайна и работа с интерфейсами.',fi:'Деньги, бюджет и решения без паники.',sc:'Как устроен мир вокруг: просто о сложном.',lo:'Учимся рассуждать строго и замечать ошибки в аргументах.',sk:'Навыки, которые пригодятся на учёбе и в работе.'};
+const RAW={en:'Английский с нуля~0~12~10;Английский для путешествий~0~6~8;Разговорный английский~1~10~12;Английский для IT~1~8~10;Деловой английский~2~10~12;Грамматика без скуки~1~9~14;Английский на слух~1~7~9;Подготовка к IELTS~2~20~18',fl:'Испанский с нуля~0~12~10;Немецкий с нуля~0~12~10;Французский с нуля~0~12~10;Китайский: первые шаги~0~14~12;Итальянский для путешествий~0~6~8;Японский: хирагана и катакана~0~8~9',pr:'Python для начинающих~0~3~8;JavaScript с нуля~0~12~12;HTML и CSS~0~8~10;React~1~14~14;Git и GitHub~0~4~8;SQL для анализа данных~1~8~10;TypeScript на практике~2~10~12;Алгоритмы и структуры данных~2~16~16',ai:'Основы машинного обучения~1~12~12;Эффективная работа с ChatGPT~0~5~8;Промпт-инжиниринг~1~6~9;AI для учёбы и исследований~0~4~7;Этика и риски ИИ~1~4~6',ma:'Основы математики~0~8~10;Алгебра без страха~1~10~12;Геометрия наглядно~1~10~12;Теория вероятностей~2~12~12',ds:'UI/UX-дизайн~0~10~10;Figma для начинающих~0~6~9;Основы типографики~1~5~8;Цвет и композиция~1~6~8',fi:'Личные финансы~0~5~8;Инвестиционная грамотность~1~8~10;Бюджет студента~0~3~6;Налоги и документы~1~4~7',sc:'Как работает интернет~0~4~7;Основы физики~1~10~12;Нейронаука для учёбы~1~6~8',lo:'Критическое мышление~0~6~8;Логические задачи~0~5~10;Когнитивные искажения~1~5~8',sk:'Публичные выступления~0~6~9;Подготовка к собеседованию~1~5~8;Тайм-менеджмент~0~4~7'};
+const REAL={'Английский с нуля':['en1','en2','en3'],'Английский для путешествий':['en4'],'Python для начинающих':['co1','co2','co3','co4','co5','co6','co7','co8'],'Основы математики':['ma1','ma3'],'Алгебра без страха':['ma2','ma4'],'Логические задачи':['lo1','lo3'],'Критическое мышление':['lo2']};
+const COURSES=[];CATS.forEach(c=>RAW[c[0]].split(';').forEach(r=>{const[t,l,h,n]=r.split('~'),i=COURSES.length;COURSES.push({id:i,t,cat:c[0],l:+l,h:+h,n:+n,L:REAL[t]||null,pop:(i*37+11)%97+3})}));
+const CT=id=>CATS.find(c=>c[0]===id);
+const cover=c=>{const k=CT(c.cat),i=c.id;return `<svg class="cv" viewBox="0 0 160 80" role="img" aria-label="Обложка курса"><rect width="160" height="80" fill="${k[2]}" stroke="none"/><circle cx="${30+i*37%100}" cy="${i*23%50+10}" r="${22+i%3*8}" fill="${k[3]}" opacity=".13" stroke="none"/><circle cx="${150-i*11%50}" cy="72" r="28" fill="${k[3]}" opacity=".1" stroke="none"/><g transform="translate(${64+i%3*6} 14) scale(2.2)" stroke="${k[3]}" stroke-width="1.6"><path d="${P[c.cat]}"/></g></svg>`};
+/* уроки: c — выбор/пропуск, i — ввод, m — сопоставление */
+const Q=(t,o,c,e)=>({k:'c',t,o:o.split('|'),c,e}),I=(t,a,e)=>({k:'i',t,a,e}),M=(p,e)=>({k:'m',t:'Сопоставьте пары',p,e});
+const MS=[
+['en1','en','Present Simple','Лёгкий',[Q('She ___ to school every day.','go|goes|going|gone',1,'С he/she/it в Present Simple к глаголу добавляется -s: she goes.'),Q('___ apple a day keeps the doctor away.','A|An|The|—',1,'Перед гласным звуком используется an: an apple.')]],
+['en2','en','Неправильные глаголы','Средний',[Q('Past Simple от write:','writed|wrote|written|writes',1,'write — wrote — written. Wrote — вторая форма.'),Q('I have ___ this film twice.','see|saw|seen|seeing',2,'Present Perfect = have + третья форма: seen.')]],
+['en3','en','Предлоги времени','Средний',[Q('The meeting is ___ Monday.','in|on|at|by',1,'С днями недели: on Monday.'),Q('We met ___ 2019.','on|at|in|since',2,'С годами и месяцами: in 2019.')]],
+['en4','en','Словарь путешественника','Лёгкий',[M([['airport','аэропорт'],['ticket','билет'],['luggage','багаж'],['passport','паспорт']],'Эти слова нужны в каждой поездке.'),Q('Как спросить дорогу: «Where is the ___?»','station|stationed|stationing|stays',0,'После артикля the нужно существительное: the station.')]],
+['ma1','math','Проценты','Лёгкий',[Q('Сколько составляет 15% от 200?','20|30|25|35',1,'200 × 0,15 = 30.'),Q('Цена выросла со 100 до 120. На сколько процентов?','10%|20%|120%|12%',1,'Прирост 20 от исходных 100 — это 20%.')]],
+['ma2','math','Уравнения','Средний',[Q('Решите: 3x + 5 = 20','3|5|15|7',1,'3x = 15, значит x = 5.'),Q('Чему равен положительный корень x² = 49?','6|7|8|9',1,'7 × 7 = 49.')]],
+['ma3','math','Дроби','Средний',[Q('1/2 + 1/3 =','2/5|5/6|1/6|3/5',1,'Общий знаменатель 6: 3/6 + 2/6 = 5/6.'),Q('Сколько составляют 3/4 от 20?','12|15|16|5',1,'20 : 4 × 3 = 15.')]],
+['ma4','math','Короткие задачи','Средний',[I('Решите: 2x − 4 = 10. Чему равен x?','7','2x = 14, значит x = 7.'),I('Сколько будет 12 × 12?','144','12 × 12 = 144.')]],
+['co1','code','Основы Python','Лёгкий',[Q('Что вернёт len([1, 2, 3])?','2|3|4|ошибку',1,'В списке три элемента.'),Q('Какой тип вернёт type(True)?','str|int|bool|float',2,'True — значение логического типа bool.')]],
+['co2','code','Циклы и числа','Средний',[Q('Сколько раз выполнится for i in range(4)?','3|4|5|0',1,'range(4) даёт 0, 1, 2, 3 — четыре значения.'),Q('Чему равно 7 // 2 в Python?','3.5|3|4|2',1,'Оператор // — целочисленное деление: 3.')]],
+['co3','code','Структуры данных','Средний',[Q('Что удобно для пар «ключ — значение»?','список|кортеж|словарь|строка',2,'Словарь (dict) хранит пары ключ — значение.'),Q('Индекс первого элемента списка в Python:','1|0|-1|2',1,'Индексация начинается с нуля.')]],
+['lo1','logic','Последовательности','Лёгкий',[Q('Продолжите: 2, 4, 8, 16, …','24|30|32|64',2,'Каждое число вдвое больше: 16 × 2 = 32.'),Q('Продолжите: 1, 1, 2, 3, 5, …','6|7|8|9',2,'Каждое число — сумма двух предыдущих: 3 + 5 = 8.')]],
+['lo2','logic','Высказывания','Средний',[Q('«Все кошки — животные». Что следует?','Все животные — кошки|Некоторые животные — кошки|Ни одна кошка не животное|Животные не бывают кошками',1,'Кошки входят в класс животных, значит некоторые животные — кошки. Обратное неверно.'),Q('Если A > B и B > C, то:','C > A|A > C|A = C|вывод невозможен',1,'Неравенства транзитивны: A > B > C, значит A > C.')]],
+['lo3','logic','Рассуждения','Сложный',[Q('У Ани больше конфет, чем у Бори, у Бори больше, чем у Веры. У кого меньше всего?','у Ани|у Бори|у Веры|нельзя определить',2,'Аня > Боря > Вера, значит меньше всего у Веры.'),Q('Часы бьют 3 раза за 2 секунды. За сколько секунд они пробьют 6 раз?','4|5|6|12',1,'Три удара — два интервала по секунде. Шесть ударов — пять интервалов = 5 секунд.')]]
+].map(([id,s,title,diff,qs])=>({id,s,title,diff,qs}));
+const MI=id=>MS.find(m=>m.id===id);
+const T=(t,v,e)=>Q(t,'Верно|Неверно',v?0:1,e);
+const MODT={'Python для начинающих':[['Модуль 1. Основы',3],['Модуль 2. Управление потоком',2],['Модуль 3. Данные и функции',3]]};
+const locked=id=>{const c=COURSES.find(c=>c.L&&c.L.includes(id));if(!c)return false;const i=c.L.indexOf(id);return i>0&&!S.done[c.L[i-1]]};
+const modHTML=c=>{let i=0;return (MODT[c.t]||[['Модуль 1',99]]).map(([t,n])=>{const ids=c.L.slice(i,i+n);i+=n;return ids.length?`<h2>${t}</h2>`+ids.map(lItem).join(''):''}).join('')};
+[
+['co1','Переменные и вывод','Лёгкий','Научиться создавать переменные и выводить значения на экран.','Переменная — это имя, которое указывает на значение. Знак = в Python означает присваивание: справа вычисляется значение, слева задаётся имя. Функция print() показывает значения в консоли.',`name = "Аня"\nage = 17\nprint(name, age)\nage = age + 1\nprint(age)`,'Создайте переменные city и year и выведите их одним вызовом print.',`city = "Ташкент"\nyear = 2026\nprint(city, year)`,[Q('Что делает строка x = 5 ?','Сравнивает x с 5|Присваивает переменной x значение 5|Выводит 5 на экран|Создаёт функцию x',1,'Знак = в Python — присваивание. Для сравнения используется ==.'),Q('Какое имя переменной допустимо?','2name|my-name|my_name|my name',2,'Имя состоит из букв, цифр и _, не начинается с цифры и не содержит дефисов и пробелов.'),T('Python различает регистр: name и Name — разные переменные.',true,'Верно: регистр важен, это два разных имени.'),I('Что выведет код: x = 2, затем x = x + 3, затем print(x)?','5','Сначала x = 2, затем x становится 2 + 3 = 5.'),Q('Какая функция выводит значение на экран?','show()|print()|echo()|write()',1,'Для вывода в Python используется print().')],'Переменная — имя для значения; = присваивает, print() выводит. Имена не начинаются с цифры, регистр важен.'],
+['co2','Типы данных и операции','Лёгкий','Различать int, float, str, bool и применять арифметические операции.','У каждого значения есть тип: целое int (7), дробное float (3.5), строка str и логическое bool (True или False). Для чисел доступны +, -, *, / (результат всегда float), // (целая часть деления), % (остаток) и ** (степень).',`print(7 / 2)    # 3.5\nprint(7 // 2)   # 3\nprint(7 % 2)    # 1\nprint(2 ** 5)   # 32\nprint(type(3.0))`,'Узнайте, сколько полных часов и минут в 135 минутах, используя // и %.',`minutes = 135\nprint(minutes // 60, minutes % 60)  # 2 15`,[Q('Чему равно 17 // 5?','3|3.4|4|2',0,'17 = 5·3 + 2, поэтому // возвращает целую часть — 3.'),I('Чему равно 17 % 5?','2','Оператор % возвращает остаток от деления: 17 = 5·3 + 2.'),Q('Какой тип у значения 3.0?','int|float|str|bool',1,'Число с десятичной точкой — float, даже если дробная часть нулевая.'),T('Результат 8 / 2 в Python — целое число 4.',false,'Неверно: оператор / всегда возвращает float, получится 4.0.'),Q('Чему равно 2 ** 3?','6|8|5|9',1,'** — возведение в степень: 2 · 2 · 2 = 8.')],'Типы int, float, str, bool. Оператор / даёт float, // — целую часть, % — остаток, ** — степень.'],
+['co3','Строки','Лёгкий','Работать со строками: склеивать, брать длину, срезы и методы.','Строка — последовательность символов. Строки можно склеивать (+), повторять (*), измерять через len() и брать символы по индексу s[0]. Срез s[a:b] берёт символы с индексами от a до b-1. Методы upper(), lower(), strip() возвращают новую строку, а исходная не меняется.',`s = "Lumo"\nprint(s[0])          # L\nprint(s[1:3])        # um\nprint(s.upper())     # LUMO\nprint(len(s) * "-")  # ----`,'Дана строка "  python  ". Выведите её без пробелов по краям заглавными буквами.',`s = "  python  "\nprint(s.strip().upper())  # PYTHON`,[Q('Что выведет print("Lumo"[1:3])?','Lu|um|umo|mo',1,'Срез [1:3] берёт символы с индексами 1 и 2: «u» и «m».'),I('Чему равно len("hello")?','5','В слове hello пять символов.'),Q('Что выведет print("ab" * 3)?','ab3|ababab|aaabbb|ошибку',1,'Умножение строки на число повторяет её: ababab.'),T('Метод upper() изменяет исходную строку на месте.',false,'Неверно: строки неизменяемы, upper() возвращает новую строку.'),Q('Какой индекс у первого символа строки?','1|0|-1|2',1,'Нумерация начинается с нуля: s[0] — первый символ.')],'Строки можно склеивать, повторять и нарезать. Индексы идут с нуля, методы возвращают новую строку.'],
+['co4','Условия','Лёгкий','Строить ветвления с if, elif и else и использовать сравнения.','Условная конструкция выполняет блок кода, только если выражение истинно. Блок задаётся отступом в 4 пробела. Сравнения: ==, !=, <, >, <=, >=. Условия объединяются через and, or, not. Ветка elif проверяется, только если предыдущие условия ложны.',`score = 72\nif score >= 90:\n    print("A")\nelif score >= 70:\n    print("B")\nelse:\n    print("C")`,'Если число n делится на 2 без остатка, выведите «чётное», иначе «нечётное».',`n = 7\nif n % 2 == 0:\n    print("чётное")\nelse:\n    print("нечётное")`,[Q('Что выведет код из примера при score = 72?','A|B|C|ничего',1,'72 не ≥ 90, но ≥ 70, срабатывает elif и выводится B.'),Q('Какой оператор проверяет равенство?','=|==|!=|=>',1,'== сравнивает значения, а = присваивает.'),T('В Python блок после if выделяется отступом.',true,'Верно: отступ — часть синтаксиса языка.'),I('Что выведет print(5 > 3 and 2 > 4)? Ответьте True или False.','False','and истинно, только если истинны оба условия; 2 > 4 ложно, значит результат False.'),Q('Когда выполняется ветка else?','всегда|когда условия выше ложны|когда условия выше истинны|никогда',1,'else — запасной вариант, если ни одно из предыдущих условий не сработало.')],'if, elif и else выбирают ветку выполнения. Сравнения дают bool, условия объединяются через and, or, not.'],
+['co5','Циклы','Средний','Применять for и while и понимать range().','Цикл for перебирает элементы последовательности, а range(n) выдаёт числа от 0 до n-1. Цикл while повторяется, пока условие истинно, поэтому внутри нужно менять переменную, иначе цикл бесконечен. break прерывает цикл, continue переходит к следующей итерации.',`total = 0\nfor i in range(1, 5):\n    total += i\nprint(total)  # 10`,'Выведите сумму чисел от 1 до 100 с помощью цикла.',`total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)  # 5050`,[Q('Какие числа даст range(1, 4)?','1, 2, 3, 4|1, 2, 3|0, 1, 2, 3|2, 3',1,'Конец диапазона не включается: 1, 2, 3.'),I('Чему равна total в примере из теории?','10','1 + 2 + 3 + 4 = 10, потому что range(1, 5) заканчивается на 4.'),T('Цикл while True без break выполняется бесконечно.',true,'Верно: условие всегда истинно, и ничто не останавливает цикл.'),Q('Что делает break?','пропускает итерацию|завершает цикл|перезапускает цикл|удаляет переменную',1,'break немедленно выходит из цикла.'),Q('Сколько раз выполнится тело цикла for i in range(0, 10, 2)?','5|10|4|6',0,'Значения 0, 2, 4, 6, 8 — пять итераций.')],'for перебирает последовательность, while работает по условию. range(a, b, шаг) не включает b, break выходит из цикла.'],
+['co6','Списки','Средний','Создавать списки и менять их с помощью индексов и методов.','Список — упорядоченная изменяемая коллекция: [1, "a", True]. Элементы берутся по индексу, а отрицательный индекс считает с конца. Метод append добавляет элемент в конец, remove удаляет значение, sort сортирует на месте. Функции len, sum и max работают со списками чисел.',`nums = [3, 1, 2]\nnums.append(5)\nnums.sort()\nprint(nums)       # [1, 2, 3, 5]\nprint(nums[-1])   # 5`,'Дан список оценок [4, 5, 3, 5]. Выведите среднее значение через sum и len.',`grades = [4, 5, 3, 5]\nprint(sum(grades) / len(grades))  # 4.25`,[Q('Что выведет print([10, 20, 30][-1])?','10|20|30|ошибку',2,'Индекс -1 — последний элемент.'),Q('Какой метод добавляет элемент в конец списка?','add|append|push|insert_end',1,'Для добавления в конец используется append().'),I('Чему равно len([1, 2, [3, 4]])?','3','Вложенный список считается одним элементом, всего их три.'),T('Список в Python изменяемый.',true,'Верно: элементы можно менять, добавлять и удалять.'),Q('Что станет с nums = [3, 1, 2] после nums.sort()?','[3, 1, 2]|[1, 2, 3]|[3, 2, 1]|None',1,'sort() сортирует список на месте по возрастанию.')],'Список хранит элементы по порядку. Индексы идут с нуля, -1 — последний; append, remove и sort изменяют список.'],
+['co7','Функции','Средний','Объявлять функции с параметрами и возвращать результат через return.','Функция — именованный блок кода, который можно вызывать многократно. Она объявляется через def, параметры перечисляются в скобках. return отдаёт результат вызывающему коду, а без return функция возвращает None. Переменные внутри функции локальные.',`def square(x):\n    return x * x\n\nprint(square(4))  # 16`,'Напишите функцию is_even(n), которая возвращает True для чётных чисел.',`def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(10))  # True`,[Q('Каким ключевым словом объявляется функция?','func|def|function|lambda',1,'Функции объявляются с помощью def.'),I('Что вернёт square(5) из примера?','25','5 · 5 = 25.'),Q('Что вернёт функция без оператора return?','0|пустую строку|None|ошибку',2,'Если return нет, результат — None.'),T('Переменная, созданная внутри функции, видна снаружи.',false,'Неверно: она локальная и существует только внутри функции.'),Q('Чем параметр отличается от аргумента?','Ничем|Параметр — имя в определении, аргумент — значение при вызове|Аргумент — имя в определении|Параметры бывают только у встроенных функций',1,'В def square(x) x — параметр, а в square(4) число 4 — аргумент.')],'def объявляет функцию, return возвращает результат. Параметры — имена в определении, аргументы — значения при вызове.'],
+['co8','Словари и ошибки','Средний','Хранить данные в словарях и обрабатывать ошибки через try/except.','Словарь хранит пары ключ: значение и быстро ищет по ключу: user = {"name": "Аня", "age": 17}. Значение берётся через user["name"], а метод get возвращает None вместо ошибки, если ключа нет. Исключения вроде ZeroDivisionError можно перехватить блоком try/except, чтобы программа не падала.',`user = {"name": "Аня", "age": 17}\nprint(user["name"])        # Аня\nprint(user.get("city"))    # None\ntry:\n    print(10 / 0)\nexcept ZeroDivisionError:\n    print("Делить на ноль нельзя")`,'Создайте словарь prices с двумя товарами. Выведите цену одного и выведите 0 для отсутствующего товара через get.',`prices = {"хлеб": 30, "молоко": 80}\nprint(prices["хлеб"])\nprint(prices.get("сыр", 0))  # 0`,[Q('Как получить значение по ключу "name" из словаря user?','user.name|user["name"]|user(name)|user{name}',1,'Значение по ключу берётся в квадратных скобках.'),Q('Что вернёт user.get("city"), если ключа нет?','ошибку KeyError|None|пустую строку|0',1,'get возвращает None или значение по умолчанию и не вызывает ошибку.'),T('Обращение user["city"] к несуществующему ключу вызовет KeyError.',true,'Верно: квадратные скобки при отсутствии ключа дают KeyError.'),Q('Какое исключение возникает при 10 / 0?','ValueError|TypeError|ZeroDivisionError|IndexError',2,'Деление на ноль вызывает ZeroDivisionError.'),M([['int','целое число'],['str','строка'],['dict','пары ключ-значение'],['bool','True или False']],'Каждый тип данных хранит свой вид значений.')],'Словарь — пары ключ: значение, get безопасно ищет ключ. try/except перехватывает ошибку и не даёт программе упасть.']
+].forEach(a=>{const m={id:a[0],s:'code',title:a[1],diff:a[2],goal:a[3],th:a[4],code:a[5],task:a[6],sol:a[7],qs:a[8],sum:a[9]},i=MS.findIndex(x=>x.id===m.id);i<0?MS.push(m):MS[i]=m});
+const SUBJ=[['en','Английский язык'],['math','Математика'],['code','Программирование'],['logic','Логика']];
+const QU=[['n','Пройти урок',1,()=>td().n],['x','Набрать 40 XP',40,()=>td().xp],['p','Пройти урок без ошибок',1,()=>S.att.filter(a=>a.d===today()&&a.c===a.n).length]];
+const ACH=[['first','Первый шаг','Пройдите первый урок',1,()=>Object.keys(S.done).length],['streak','В ударе','Занимайтесь 3 дня подряд',3,()=>streak()],['perf','Перфекционист','Пройдите урок без ошибок',1,()=>S.att.filter(a=>a.c===a.n).length],['expl','Исследователь','Пройдите уроки в трёх предметах',3,()=>new Set(Object.keys(S.done).map(i=>MI(i).s)).size],['mara','Марафонец','Пройдите пять уроков',5,()=>Object.keys(S.done).length],['crs','Выпускник','Завершите курс целиком',1,()=>COURSES.filter(complete).length]];
+const SAMPLE=[['Алина К.',340,2150],['Тимур Р.',260,1720],['Дарья М.',180,1310],['Илья С.',120,860],['Камила Н.',60,430]];
+/* состояние */
+const def=()=>({v:2,xp:0,done:{},days:{},att:[],ach:[],fav:[],last:null,qd:{}});
+function load(){for(const k of[KEY,'rostok.v1'])try{const s=JSON.parse(localStorage.getItem(k));if(s&&typeof s.xp==='number'&&s.done&&s.days&&Array.isArray(s.att))return Object.assign(def(),s,{v:2})}catch(e){}return def()}
+let S=load();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const day=d=>new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const today=()=>day(new Date()),td=()=>S.days[today()]||{xp:0,n:0};
+function streak(){let n=0,g=1,d=new Date();if(!S.days[day(d)])d.setDate(d.getDate()-1);for(let i=0;i<400;i++){if(S.days[day(d)])n++;else if(n>0&&g-->0){}else break;d.setDate(d.getDate()-1)}return n}
+const lvl=()=>Math.floor(S.xp/LV)+1;
+const week=()=>[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);const r=S.days[day(d)]||{xp:0,n:0};return{l:d.toLocaleDateString('ru',{weekday:'short'}),xp:r.xp,n:r.n}});
+const weekXp=()=>week().reduce((a,b)=>a+b.xp,0);
+const acc=()=>{const n=S.att.reduce((a,b)=>a+b.n,0);return n?Math.round(S.att.reduce((a,b)=>a+b.c,0)/n*100):null};
+const cp=c=>c.L?c.L.filter(i=>S.done[i]).length:0,complete=c=>c.L&&cp(c)===c.L.length,nextL=c=>c.L&&c.L.find(i=>!S.done[i]);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s).trim().toLowerCase().replace(',','.');
+/* Telegram */
+const tg=window.Telegram&&window.Telegram.WebApp,inTg=!!(tg&&tg.initData),tgUser=inTg&&tg.initDataUnsafe&&tg.initDataUnsafe.user;
+try{if(tg){tg.ready();tg.expand();if(tg.BackButton)tg.BackButton.onClick(()=>acts.exit())}}catch(e){}
+const backBtn=()=>{try{if(tg&&tg.BackButton)(q||cur!==null)?tg.BackButton.show():tg.BackButton.hide()}catch(e){}};
+/* навигация и квиз */
+let tab='home',cur=null,lb='w',q=null;
+const F={q:'',cat:'',lv:-1,sort:'p',fav:false};
+const newQ=m=>({m,i:m.th?-1:0,sel:null,ok:false,c:0,miss:[],done:false,res:null,pk:null,mt:{},w:0});
+const rs=()=>{q.sel=null;q.pk=null;q.mt={};q.w=0;q.ok=false};
+function mark(ok,k){q.ok=ok;if(ok)q.c++;else q.miss.push(k)}
+function finish(){
+  if(q.done)return;q.done=true;
+  const m=q.m,n=m.qs.length,first=!S.done[m.id],t=today(),b={},L0=lvl();
+  if(first){b.ok=q.c*SC.ok;b.les=SC.lesson;if(q.c===n)b.perf=SC.perfect}
+  let xp=Object.values(b).reduce((a,c)=>a+c,0);
+  const prev=S.done[m.id];if(!prev||q.c>prev.c)S.done[m.id]={c:q.c,n};
+  const d=S.days[t]||{xp:0,n:0};d.xp+=xp;d.n++;S.days[t]=d;
+  S.att.push({id:Date.now()+'-'+m.id,m:m.id,s:m.s,c:q.c,n,xp,d:t});
+  const qd=S.qd[t]||(S.qd[t]=[]);let qx=0;
+  QU.forEach(u=>{if(!qd.includes(u[0])&&u[3]()>=u[2]){qd.push(u[0]);qx+=SC.quest}});
+  if(qx)b.q=qx;xp+=qx;d.xp+=qx;S.xp+=xp;
+  const gained=[];ACH.forEach(a=>{if(!S.ach.includes(a[0])&&a[4]()>=a[3]){S.ach.push(a[0]);gained.push(a)}});
+  save();q.res={xp,b,first,gained,lv:lvl()>L0};
+}
+const acts={
+  tab(v){tab=v;cur=null;q=null;backBtn();render()},
+  open(v){cur=+v;backBtn();render()},
+  fav(v){v=+v;S.fav=S.fav.includes(v)?S.fav.filter(x=>x!==v):S.fav.concat(v);save();render()},
+  start(v){if(locked(v))return;q=newQ(MI(v));const c=COURSES.find(c=>c.L&&c.L.includes(v));if(c){S.last=c.id;save()}backBtn();render()},
+  ans(v){if(q.sel!==null)return;q.sel=+v;const k=q.m.qs[q.i];mark(q.sel===k.c,k);render()},
+  chk(){if(!q||q.sel!==null)return;const e=document.getElementById('inp'),v=e&&e.value.trim();if(!v)return;const k=q.m.qs[q.i];q.sel=v;mark(norm(v)===norm(k.a),k);render()},
+  mp(v){if(q.sel===null){q.pk=+v;render()}},
+  mr(v){const k=q.m.qs[q.i];if(q.sel!==null||q.pk===null)return;if(+v===q.pk){q.mt[v]=1;if(Object.keys(q.mt).length===k.p.length){q.sel='done';mark(q.w===0,k)}}else q.w++;q.pk=null;render()},
+  next(){if(q.sel===null)return;if(q.i<q.m.qs.length-1){q.i++;rs();render()}else{finish();render()}},
+  go(){q.i=0;render()},
+  retry(){q=newQ(q.m);render()},
+  exit(){if(q)q=null;else cur=null;backBtn();render()},
+  lb(v){lb=v;render()},
+  cat(v){F.cat=v;render()},lv(v){F.lv=+v;render()},fv(v){F.fav=v==='1';render()},
+  rf(){Object.assign(F,{q:'',cat:'',lv:-1,fav:false});render()},
+  reset(){if(confirm('Удалить весь прогресс на этом устройстве?')){S=def();save();render()}}
+};
+/* экраны */
+const bar=(a,b)=>`<div class="bar"><i style="width:${Math.min(100,Math.round(a/Math.max(1,b)*100))}%"></i></div>`;
+const wk=()=>{const w=week(),mx=Math.max(1,...w.map(x=>x.n));return `<div class="wk">${w.map(x=>`<div><i style="height:${x.n/mx*70}%"></i>${x.l}</div>`).join('')}</div>`};
+const card=c=>{const f=S.fav.includes(c.id),p=cp(c);return `<div class="cc" tabindex="0" role="button" data-a="open" data-v="${c.id}">${cover(c)}<button class="hb ${f?'on':''}" data-a="fav" data-v="${c.id}" aria-label="${f?'Убрать из избранного':'В избранное'}">${ic('heart')}</button><div class="cb"><b>${c.t}</b><div class="m">${LVN[c.l]} · ${c.h} ч · ${c.n} ур.</div>${c.L?(complete(c)?'<span class="chip">Пройден</span>':bar(p,c.L.length)):'<span class="chip y">Скоро</span>'}</div></div>`};
+const lItem=id=>{const m=MI(id),d=S.done[id],lk=locked(id);return `<button class="card item" ${lk?'disabled style="opacity:.55"':''} data-a="start" data-v="${id}"><span class="ico">${ic(d?'check':'book')}</span><span style="flex:1"><b>${m.title}</b><div class="m">Вопросов: ${m.qs.length} · ${m.diff}</div></span>${d?`<span class="chip">${d.c}/${d.n}</span>`:lk?'<span class="chip y">Сначала предыдущий</span>':''}</button>`};
+function list(){const s=F.q.trim().toLowerCase();return COURSES.filter(c=>(!s||c.t.toLowerCase().includes(s))&&(!F.cat||c.cat===F.cat)&&(F.lv<0||c.l===F.lv)&&(!F.fav||S.fav.includes(c.id))).sort((a,b)=>F.sort==='p'?b.pop-a.pop:a.h-b.h)}
+function resHTML(){const r=list();return `<div class="m" style="margin-top:12px">Найдено курсов: <b>${r.length}</b>${F.sort==='p'?' · популярность — демонстрационные данные':''}</div>`+(r.length?`<div class="grid">${r.map(card).join('')}</div>`:`<div class="card" style="text-align:center">${lumo('sad',72)}<h2 style="margin-top:0">Ничего не нашлось</h2><p class="m">${F.fav?'В избранном пока пусто. Нажмите сердечко на карточке курса.':'Попробуйте другой запрос или сбросьте фильтры.'}</p><button class="btn g" data-a="rf">Сбросить фильтры</button></div>`)}
+const views={
+home(){
+  const L=lvl(),cur0=S.xp%LV,qd=S.qd[today()]||[];
+  const cc=(S.last!==null&&nextL(COURSES[S.last])&&COURSES[S.last])||COURSES.find(c=>c.L&&nextL(c)),rec=COURSES.filter(c=>c.L&&c!==cc&&!complete(c)).slice(0,3);
+  const g=S.ach.slice(-3).map(i=>ACH.find(a=>a[0]===i));
+  return `${logo()}
+  <div class="card"><div class="row"><div class="hop">${lumo(streak()?'happy':'ok',72)}</div><div style="flex:1"><h1>${tgUser?'Привет, '+esc(tgUser.first_name)+'!':'Привет!'}</h1><div class="m">${inTg?'Прогресс хранится на этом устройстве.':'Демо-режим: вход не выполнен, прогресс хранится в браузере.'}</div></div></div>
+  <div class="row sp" style="margin-top:12px"><div><div class="m">Уровень</div><div class="num" style="font-size:30px">${L}</div></div><div style="text-align:right"><div class="m">Серия</div><div class="num" style="font-size:30px;color:var(--co)">${streak()} дн.</div></div></div>
+  ${bar(cur0,LV)}<div class="m" style="margin-top:6px"><b class="num">${cur0}</b> / ${LV} XP до уровня ${L+1}</div></div>
+  <h2>Задания на сегодня</h2><div class="card">${QU.map(u=>{const p=Math.min(u[2],u[3]()),dn=qd.includes(u[0]);return `<div style="margin-bottom:12px"><div class="row sp"><span>${u[1]}</span><span class="chip ${dn?'':'y'}">${dn?'Готово +'+SC.quest+' XP':p+'/'+u[2]}</span></div>${bar(p,u[2])}</div>`}).join('')}</div>
+  ${cc?`<h2>${S.last===cc.id?'Продолжить':'Начните с этого'}</h2><div class="card" style="padding:8px">${cover(cc)}<div style="padding:8px"><b>${cc.t}</b><div class="m">${cp(cc)} из ${cc.L.length} готовых уроков</div><button class="btn" data-a="start" data-v="${nextL(cc)}">Начать обучение</button></div></div>`:`<div class="card" style="text-align:center">${lumo('happy',72,'hop')}<h2 style="margin-top:0">Все готовые уроки пройдены</h2><p class="m">Новые материалы скоро появятся.</p></div>`}
+  ${rec.length?`<h2>Рекомендуем</h2><div class="grid">${rec.slice(0,2).map(card).join('')}</div>`:''}
+  <button class="btn g" data-a="tab" data-v="courses">Весь каталог · ${COURSES.length} курса</button>
+  <h2>Последние достижения</h2>${g.length?g.map(a=>`<div class="card item"><span class="ico" style="background:var(--yb);color:var(--y)">${ic('award')}</span><div><b>${a[1]}</b><div class="m">${a[2]}</div></div></div>`).join(''):'<div class="card m">Пока пусто. Пройдите первый урок — это займёт около минуты.</div>'}`},
+courses(){
+  return `<h1>Курсы</h1><div class="m">${COURSES.length} курсов в каталоге. Уроки готовы для ${COURSES.filter(c=>c.L).length}, остальные — демонстрационные записи.</div>
+  <div style="position:relative;margin-top:12px"><span style="position:absolute;left:12px;top:14px;color:var(--m)">${ic('search')}</span><input id="sq" class="inp" type="search" placeholder="Поиск по названию" value="${esc(F.q)}" autocomplete="off"></div>
+  <div class="tabs"><button class="${F.fav?'':'on'}" data-a="fv" data-v="0">Все</button><button class="${F.fav?'on':''}" data-a="fv" data-v="1">Избранное (${S.fav.length})</button></div>
+  <div class="chips"><button class="${F.cat?'':'on'}" data-a="cat" data-v="">Все</button>${CATS.map(c=>`<button class="${F.cat===c[0]?'on':''}" data-a="cat" data-v="${c[0]}">${c[1]}</button>`).join('')}</div>
+  <div class="row" style="margin-top:8px"><div class="chips" style="padding:0;flex:1"><button class="${F.lv<0?'on':''}" data-a="lv" data-v="-1">Любой</button>${LVN.map((n,i)=>`<button class="${F.lv===i?'on':''}" data-a="lv" data-v="${i}">${n}</button>`).join('')}</div>
+  <select id="so" class="sel2" aria-label="Сортировка"><option value="p" ${F.sort==='p'?'selected':''}>Популярные</option><option value="h" ${F.sort==='h'?'selected':''}>Короткие</option></select></div>
+  <div id="res">${resHTML()}</div>`},
+course(){
+  const c=COURSES[cur],k=CT(c.cat),p=cp(c),f=S.fav.includes(c.id),nl=nextL(c);
+  return `<button class="row m" data-a="exit" style="min-height:44px;width:auto">${ic('back')} К каталогу</button>${cover(c)}
+  <div class="row sp" style="margin-top:12px"><h1>${c.t}</h1><button class="hb ${f?'on':''}" style="position:static;flex:none;border:2px solid var(--b)" data-a="fav" data-v="${c.id}" aria-label="Избранное">${ic('heart')}</button></div>
+  <div class="m">${k[1]} · ${LVN[c.l]} · ${c.h} ч · ${c.n} уроков</div><p style="margin-top:8px">${BL[c.cat]}</p>
+  ${c.L?`${bar(p,c.L.length)}<div class="m" style="margin-top:6px"><span class="chip ${p===c.L.length?'':'y'}">${p===c.L.length?'Завершён':p?'В процессе':'Не начат'}</span> Пройдено ${p} из ${c.L.length} уроков</div>
+  <button class="btn" data-a="start" data-v="${nl||c.L[0]}">${p===c.L.length?'Пройти ещё раз':p?'Продолжить':'Начать обучение'}</button>
+  ${modHTML(c)}${c.L.length<c.n?`<p class="m" style="margin-top:12px">В демо готово ${c.L.length} из ${c.n} уроков, остальные ещё в разработке.</p>`:''}`
+  :`<div class="card">${lumo('ok',56)}<p style="margin-top:8px">Это демонстрационная запись каталога. Учебные материалы для неё ещё не созданы.</p></div><button class="btn" disabled>Начать обучение</button>`}`},
+rank(){
+  const rows=SAMPLE.map(r=>({n:r[0]+' (пример)',x:lb==='w'?r[1]:r[2]})).concat([{n:'Вы',x:lb==='w'?weekXp():S.xp,me:1}]).sort((a,b)=>b.x-a.x);
+  return `<h1>Рейтинг</h1><div class="tabs"><button class="${lb==='w'?'on':''}" data-a="lb" data-v="w">Неделя</button><button class="${lb==='a'?'on':''}" data-a="lb" data-v="a">Всё время</button></div>
+  ${rows.map((r,i)=>`<div class="card item ${r.me?'me':''}"><span class="num m" style="width:20px">${i+1}</span><span class="ico" style="border-radius:50%">${esc(r.n[0])}</span><b style="flex:1">${esc(r.n)}</b><span class="num">${r.x} XP</span></div>`).join('')}
+  <p class="m" style="margin-top:12px">Остальные участники — демонстрационные профили, а не реальные люди. Общий рейтинг появится после подключения сервера.</p>`},
+ach(){return `<h1>Достижения</h1>`+ACH.map(a=>{const e=S.ach.includes(a[0]),p=Math.min(a[3],a[4]());return `<div class="card"><div class="row"><span class="ico" style="${e?'background:var(--yb);color:var(--y)':''}">${ic('award')}</span><div style="flex:1"><b>${a[1]}</b><div class="m">${a[2]}</div></div><span class="chip ${e?'y':''}">${e?'Получено':p+'/'+a[3]}</span></div>${e?'':bar(p,a[3])}</div>`}).join('')},
+prof(){
+  const a=acc(),nm=tgUser?esc(tgUser.first_name):'Гость',st=(l,v)=>`<div><div class="m">${l}</div><div class="num" style="font-size:24px">${v}</div></div>`;
+  return `<div class="row">${lumo('happy',64)}<div><h1>${nm}</h1><p class="m">${inTg?'Данные Telegram получены без серверной проверки.':'Демо-режим, вход не выполнен'}</p></div></div>
+  <div class="card"><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">${st('Уровень',lvl())}${st('Всего XP',S.xp)}${st('Завершено курсов',COURSES.filter(complete).length)}${st('Точность',a===null?'—':a+'%')}${st('Серия',streak()+' дн.')}${st('Достижения',S.ach.length+'/'+ACH.length)}</div></div>
+  ${S.att.length?'':'<div class="card m">Статистика появится после первого урока.</div>'}
+  <h2>Неделя</h2><div class="card">${wk()}<div class="m" style="margin-top:8px">Пройдено уроков по дням</div></div>
+  <h2>Предметы</h2><div class="card">${SUBJ.map(s=>{const ms=MS.filter(m=>m.s===s[0]),d=ms.filter(m=>S.done[m.id]).length;return `<div style="margin-bottom:12px"><div class="row sp"><span>${s[1]}</span><span class="m">${d}/${ms.length}</span></div>${bar(d,ms.length)}</div>`}).join('')}</div>
+  <details class="card"><summary style="cursor:pointer;font-weight:800">Модель развития (гипотезы)</summary><p class="m" style="margin-top:8px">Базовые курсы бесплатны. Гипотезы для проверки: Premium с персональным планом и аналитикой; подписка для школ и учебных центров. Цены не определены, платежи не подключены.</p></details>
+  <button class="btn g" data-a="reset" style="color:var(--bad)">Сбросить прогресс</button>`}
+};
+function quiz(){
+  if(q.i<0)return theory();
+  const k=q.m.qs[q.i],n=q.m.qs.length,a=q.sel!==null;let body='';
+  if(k.k==='c')body=k.o.map((o,i)=>`<button class="opt ${a?(i===k.c?'ok':i===q.sel?'no':''):''}" data-a="ans" data-v="${i}" ${a?'disabled':''}>${esc(o)}</button>`).join('');
+  else if(k.k==='i')body=`<input id="inp" class="in ${a?(q.ok?'ok':'no'):''}" inputmode="decimal" autocomplete="off" aria-label="Ваш ответ" ${a?'disabled value="'+esc(q.sel)+'"':''}>${a?'':'<button class="btn" data-a="chk">Проверить</button>'}`;
+  else{const o=k.p.map((_,i)=>i).reverse(),bt=(i,t,act,sl)=>`<button class="opt ${q.mt[i]?'ok':sl?'sel':''}" data-a="${act}" data-v="${i}" ${q.mt[i]||a?'disabled':''}>${esc(t)}</button>`;
+    body=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div>${k.p.map((p,i)=>bt(i,p[0],'mp',q.pk===i)).join('')}</div><div>${o.map(i=>bt(i,k.p[i][1],'mr',0)).join('')}</div></div>`}
+  return `<div class="row sp"><button class="row m" data-a="exit" style="width:auto;min-height:44px">${ic('x')} Выйти</button><span class="m">${q.i+1} из ${n}</span></div>${bar(q.i+(a?1:0),n)}
+  <div class="m" style="margin-top:16px">${q.m.title}</div><h1 style="margin-top:4px">${k.t}</h1>${body}
+  ${a?`<div class="card pop ${q.ok?'me':''}"><div class="row">${lumo(q.ok?'happy':'sad',44)}<div><b>${q.ok?'Верно!':'Неверно'}</b>${k.k==='i'&&!q.ok?`<div>Правильный ответ: ${esc(k.a)}</div>`:''}${k.k==='m'&&q.w?`<div class="m">Ошибок: ${q.w}</div>`:''}</div></div><p style="margin-top:8px">${k.e}</p></div><button class="btn" data-a="next">${q.i<n-1?'Дальше':'Завершить'}</button>`:''}`;
+}
+function theory(){const m=q.m;return `<div class="row sp"><button class="row m" data-a="exit" style="width:auto;min-height:44px">${ic('x')} Выйти</button><span class="m">${m.diff}</span></div><h1>${m.title}</h1>
+  <div class="card me"><b>Цель урока</b><p>${m.goal}</p></div>
+  <div class="card"><b>Объяснение</b><p>${m.th}</p>${m.code?`<pre>${esc(m.code)}</pre>`:''}</div>
+  <div class="card"><b>Практика</b><p>${m.task}</p><details><summary style="cursor:pointer;font-weight:800;margin-top:8px">Показать образец решения</summary><pre>${esc(m.sol)}</pre></details><p class="m">Эту задачу приложение не проверяет автоматически: сверьте своё решение с образцом.</p></div>
+  <button class="btn" data-a="go">К проверке знаний</button>`}
+function result(){
+  const r=q.res,n=q.m.qs.length,p=Math.round(q.c/n*100),LB={ok:'Верные ответы',les:'За урок',perf:'Без ошибок',q:'Задания дня'};
+  return `<div style="text-align:center"><div class="hop" style="display:inline-block">${lumo(p>=50?'happy':'sad',112)}</div><h1>${p===100?'Безупречно!':p>=50?'Отличная работа!':'Хорошая попытка'}</h1><p class="m">${q.m.title}${r.lv?' · Новый уровень: '+lvl():''}</p></div>
+  <div class="card pop"><div class="row sp"><div><div class="m">Точность</div><div class="num" style="font-size:32px">${p}%</div></div><div style="text-align:right"><div class="m">Получено</div><div class="num" style="font-size:32px;color:var(--a)">+${r.xp} XP</div></div></div>
+  ${Object.keys(r.b).map(k=>`<div class="row sp m" style="margin-top:6px"><span>${LB[k]}</span><span class="num">+${r.b[k]}</span></div>`).join('')}
+  ${r.first?'':'<p class="m" style="margin-top:8px">Повторное прохождение: XP за урок начисляется один раз.</p>'}</div>
+  ${q.m.sum?`<div class="card"><b>Итог урока</b><p>${q.m.sum}</p></div>`:''}
+  ${r.gained.map(a=>`<div class="card item pop me"><span class="ico" style="background:var(--yb);color:var(--y)">${ic('award')}</span><div><b>Достижение: ${a[1]}</b><div class="m">${a[2]}</div></div></div>`).join('')}
+  ${q.miss.length?`<h2>Стоит повторить</h2>${q.miss.map(k=>`<div class="card"><b>${k.t}</b><p class="m" style="margin-top:4px">${k.e}</p></div>`).join('')}`:''}
+  ${(()=>{const c=COURSES.find(c=>c.L&&c.L.includes(q.m.id)),n=c&&c.L[c.L.indexOf(q.m.id)+1];return n?`<button class="btn" data-a="start" data-v="${n}">Следующий урок</button>`:''})()}<button class="btn g" data-a="retry">Пройти ещё раз</button><button class="btn g" data-a="exit">Назад</button>`;
+}
+const NAV=[['home','Главная','home'],['courses','Курсы','book'],['rank','Рейтинг','trophy'],['ach','Достижения','award'],['prof','Профиль','user']];
+function render(){
+  const root=document.getElementById('app');
+  try{root.innerHTML=q?(q.done?result():quiz()):cur!==null?views.course():views[tab]()}
+  catch(e){root.innerHTML='<h1>Что-то пошло не так</h1><p class="m">Не удалось показать экран. Обновите страницу или сбросьте прогресс в профиле.</p>'}
+  const nv=document.getElementById('nav');nv.style.display=q?'none':'flex';
+  nv.firstChild.innerHTML=NAV.map(n=>`<button data-a="tab" data-v="${n[0]}" ${n[0]===tab&&cur===null?'aria-current="page"':''}>${ic(n[2])}${n[1]}</button>`).join('');
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&acts[t.dataset.a])acts[t.dataset.a](t.dataset.v)});
+document.addEventListener('input',e=>{if(e.target.id==='sq'){F.q=e.target.value;document.getElementById('res').innerHTML=resHTML()}});
+document.addEventListener('change',e=>{if(e.target.id==='so'){F.sort=e.target.value;document.getElementById('res').innerHTML=resHTML()}});
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;if(e.target.id==='inp')acts.chk();else if(e.target.tagName==='DIV'&&e.target.dataset.a)e.target.click()});
+render();
+</script></body></html>
